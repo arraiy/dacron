@@ -1,0 +1,12 @@
+language: cpp
+sudo: required
+dist: trusty
+services:
+  - docker
+
+script:
+  - echo Hello
+
+cache:
+  - apt
+  - docker
