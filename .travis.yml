@@ -5,7 +5,7 @@ services:
   - docker
 
 script:
-  - echo Hello
+  - ./cv_run ./travis_build.sh
 
 cache:
   - apt
