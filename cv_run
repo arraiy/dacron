@@ -11,22 +11,12 @@ OPENCV_AI_CODE_ROOT="$( command cd -P "$sdk_dir/.." > /dev/null && pwd -P)"
 # Update the digest to match the image you which to use.
 if [ -z "$OPENCVAI_DEV_ENV_TAG" ]
 then
-    DIGEST=@sha256:d4d0aea0351c4080eecc94b302c8d1f84b3ce4c6e68e113a54ba615dab463e5d
+    DIGEST=@sha256:a2a5911f8e78f043dca11469b564b41d85fba8c06a7bdc2f4e91597fadb7b628
 else
     DIGEST=$OPENCVAI_DEV_ENV_TAG
 fi
 
-OPENCVAI_IMAGE=opencvai/dev_env14.04$DIGEST
-
-# these forward the host's DISPLAY to the container.
-FORWARD_DISPLAY_FLAGS=$(echo \
-    --env="DISPLAY" \
-    --volume="/etc/group:/etc/group:ro" \
-    --volume="/etc/passwd:/etc/passwd:ro" \
-    --volume="/etc/shadow:/etc/shadow:ro" \
-    --volume="/etc/sudoers.d:/etc/sudoers.d:ro" \
-    --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw"
-)
+OPENCVAI_IMAGE=opencvai/mini_dev_env14.04$DIGEST
 
 # Add /opt/opencv_ai/bin to the path.
 PATH_FLAGS=$(echo \
@@ -35,7 +25,6 @@ PATH_FLAGS=$(echo \
 
 docker run -it --rm \
         $PATH_FLAGS \
-        $FORWARD_DISPLAY_FLAGS \
 	-u=$(id -u ${USER}):$(id -g ${USER}) \
 	-v $OPENCV_AI_CODE_ROOT:$OPENCV_AI_CODE_ROOT \
 	-w=$(pwd) \
