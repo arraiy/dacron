@@ -55,7 +55,7 @@ gtest_add_tests(SpliceTest "" ${Splice_TEST_SOURCES})
 set_property(TARGET Splice PROPERTY VERSION ${Splice_VERSION})
 set_property(TARGET Splice PROPERTY SOVERSION ${Splice_MAJOR_VERSION})
 set_property(TARGET Splice PROPERTY
-  INTERFACE_Splice_MAJOR_VERSION 3)
+  INTERFACE_Splice_MAJOR_VERSION ${Splice_MAJOR_VERSION})
 set_property(TARGET Splice APPEND PROPERTY
   COMPATIBLE_INTERFACE_STRING Splice_MAJOR_VERSION
 )
@@ -71,7 +71,7 @@ install(
   FILES
      ${Splice_HEADERS}
   DESTINATION
-    include
+    include/splice
   COMPONENT
     Devel
 )

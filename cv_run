@@ -11,12 +11,12 @@ OPENCV_AI_CODE_ROOT="$( command cd -P "$sdk_dir/.." > /dev/null && pwd -P)"
 # Update the digest to match the image you which to use.
 if [ -z "$OPENCVAI_DEV_ENV_TAG" ]
 then
-    DIGEST=@sha256:f61974dbba22962bf7674665f51f99dbc5eaa3a4c1dcf12f0a1776b061c2c6c9
+    DIGEST=@sha256:d4d0aea0351c4080eecc94b302c8d1f84b3ce4c6e68e113a54ba615dab463e5d
 else
     DIGEST=$OPENCVAI_DEV_ENV_TAG
 fi
 
-OPENCVAI_IMAGE=opencvai/dev_env16.04$DIGEST
+OPENCVAI_IMAGE=opencvai/dev_env14.04$DIGEST
 
 # these forward the host's DISPLAY to the container.
 FORWARD_DISPLAY_FLAGS=$(echo \
@@ -30,7 +30,7 @@ FORWARD_DISPLAY_FLAGS=$(echo \
 
 # Add /opt/opencv_ai/bin to the path.
 PATH_FLAGS=$(echo \
-    --env="PATH=/opt/opencv_ai/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    --env="PATH=/opt/opencv_ai/bin:/usr/lib/llvm-3.6/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 )
 
 docker run -it --rm \
