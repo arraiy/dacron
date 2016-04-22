@@ -47,6 +47,11 @@ class Context {
     return strand_->wrap(std::forward<Function>(f));
   }
 
+  void ResetAndRun() {
+    Reset();
+    Run();
+  }
+
   size_t Run() { return io_service_->run(); }
 
   void Reset() { io_service_->reset(); }

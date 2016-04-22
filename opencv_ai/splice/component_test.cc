@@ -16,12 +16,12 @@ TEST(Component, Construct) {
 TEST(Component, ValidName) {
   EXPECT_FALSE(ValidName(""));
   EXPECT_FALSE(ValidName("0"));
-  EXPECT_FALSE(ValidName("a"));
+  EXPECT_TRUE(ValidName("a"));
   EXPECT_FALSE(ValidName("0a"));
   EXPECT_FALSE(ValidName("a0/a"));
-
   EXPECT_TRUE(ValidName("a0"));
   EXPECT_TRUE(ValidName("a0a"));
+  EXPECT_TRUE(ValidName("a_b"));
   Context ctx1;
   EXPECT_DEATH(Component(ctx1, ""), "Name is not valid");
 }

@@ -35,6 +35,7 @@ set(Splice_TEST_SOURCES)
 foreach(name
     context
     component
+    io
     )
   LIST(APPEND Splice_SOURCES opencv_ai/splice/${name}.cc)
   LIST(APPEND Splice_HEADERS opencv_ai/splice/${name}.h)

@@ -10,8 +10,8 @@
 
 namespace opencv_ai {
 
-bool ValidName(const std::string& name) {
-  static const boost::regex e("[a-zA-Z][\\w]+");
+inline bool ValidName(const std::string& name) {
+  static const boost::regex e("[a-zA-Z][\\w_]*");
   return regex_match(name, e);
 }
 
