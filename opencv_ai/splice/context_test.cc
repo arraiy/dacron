@@ -6,34 +6,34 @@ namespace opencv_ai {
 TEST(Context, Construct) {
   Context ctx1;
   Context ctx2;
-  EXPECT_NE(&ctx1.get_io_service(), &ctx2.get_io_service());
+  EXPECT_NE(&ctx1.GetIoService(), &ctx2.GetIoService());
   Context ctx3 = ctx2;
-  EXPECT_EQ(&ctx2.get_io_service(), &ctx3.get_io_service());
-  EXPECT_EQ(&ctx2.get_strand(), &ctx3.get_strand());
+  EXPECT_EQ(&ctx2.GetIoService(), &ctx3.GetIoService());
+  EXPECT_EQ(&ctx2.GetStrand(), &ctx3.GetStrand());
   Context ctx4(ctx2, ContextState::kDifferent);
-  EXPECT_EQ(&ctx2.get_io_service(), &ctx4.get_io_service());
-  EXPECT_NE(&ctx2.get_strand(), &ctx4.get_strand());
+  EXPECT_EQ(&ctx2.GetIoService(), &ctx4.GetIoService());
+  EXPECT_NE(&ctx2.GetStrand(), &ctx4.GetStrand());
 }
 
 TEST(Context, Post) {
   Context ctx;
   bool dispatched = false;
-  ctx.post([&] { dispatched = true; });
-  ctx.run();
+  ctx.Post([&] { dispatched = true; });
+  ctx.Run();
   EXPECT_TRUE(dispatched);
 }
 
 TEST(Context, Wrap) {
   Context ctx;
   bool dispatched = false;
-  auto f = ctx.wrap([&] { dispatched = true; });
-  ctx.run();
-  ctx.reset();
+  auto f = ctx.Wrap([&] { dispatched = true; });
+  ctx.Run();
+  ctx.Reset();
   EXPECT_FALSE(dispatched);
   f();
   EXPECT_FALSE(dispatched);
-  ctx.run();
-  ctx.reset();
+  ctx.Run();
+  ctx.Reset();
   EXPECT_TRUE(dispatched);
 }
 

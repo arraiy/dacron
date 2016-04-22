@@ -18,7 +18,7 @@ set(CMAKE_CXX_FLAGS
   "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror")
 
 
-find_package(Boost REQUIRED program_options filesystem system)
+find_package(Boost REQUIRED program_options filesystem system regex)
 find_package(GTest REQUIRED)
 find_package(glog REQUIRED)
 
@@ -34,6 +34,7 @@ set(Splice_HEADERS)
 set(Splice_TEST_SOURCES)
 foreach(name
     context
+    component
     )
   LIST(APPEND Splice_SOURCES opencv_ai/splice/${name}.cc)
   LIST(APPEND Splice_HEADERS opencv_ai/splice/${name}.h)
@@ -45,7 +46,8 @@ add_library(Splice SHARED
   ${Splice_HEADERS})
 
 target_link_libraries(Splice
-  ${Boost_LIBRARIES})
+  ${Boost_LIBRARIES}
+  ${glog_LIBRARIES})
 
 add_executable(SpliceTest
   opencv_ai/splice/test_main.cc

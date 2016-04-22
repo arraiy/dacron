@@ -38,21 +38,21 @@ class Context {
   Context& operator=(Context&& context) = default;
 
   template <typename Function>
-  void post(Function&& f) {
+  void Post(Function&& f) {
     strand_->post(std::forward<Function>(f));
   }
 
   template <typename Function>
-  std::function<void()> wrap(Function&& f) {
+  std::function<void()> Wrap(Function&& f) {
     return strand_->wrap(std::forward<Function>(f));
   }
 
-  size_t run() { return io_service_->run(); }
+  size_t Run() { return io_service_->run(); }
 
-  void reset() { io_service_->reset(); }
+  void Reset() { io_service_->reset(); }
 
-  boost::asio::io_service::strand& get_strand() const { return *strand_; }
-  boost::asio::io_service& get_io_service() const { return *io_service_; }
+  boost::asio::io_service::strand& GetStrand() const { return *strand_; }
+  boost::asio::io_service& GetIoService() const { return *io_service_; }
 
  private:
   std::shared_ptr<boost::asio::io_service> io_service_;
