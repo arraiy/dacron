@@ -32,24 +32,28 @@ set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
 set(Splice_SOURCES)
 set(Splice_HEADERS)
 set(Splice_TEST_SOURCES)
-foreach(name splice)
-  LIST(APPEND Splice_SOURCES splice/${name}.cc)
-  LIST(APPEND Splice_HEADERS splice/${name}.h)
-  LIST(APPEND Splice_TEST_SOURCES splice/${name}_test.cc)
+foreach(name
+    context
+    )
+  LIST(APPEND Splice_SOURCES opencv_ai/splice/${name}.cc)
+  LIST(APPEND Splice_HEADERS opencv_ai/splice/${name}.h)
+  LIST(APPEND Splice_TEST_SOURCES opencv_ai/splice/${name}_test.cc)
 endforeach()
 
 add_library(Splice SHARED
   ${Splice_SOURCES}
   ${Splice_HEADERS})
 
+target_link_libraries(Splice
+  ${Boost_LIBRARIES})
+
 add_executable(SpliceTest
-  splice/test_main.cc
+  opencv_ai/splice/test_main.cc
   ${Splice_TEST_SOURCES})
 
 target_link_libraries(SpliceTest Splice ${GTEST_LIBRARY} -pthread)
 
 gtest_add_tests(SpliceTest "" ${Splice_TEST_SOURCES})
-
 
 
 set_property(TARGET Splice PROPERTY VERSION ${Splice_VERSION})
@@ -71,7 +75,7 @@ install(
   FILES
      ${Splice_HEADERS}
   DESTINATION
-    include/splice
+    include/opencv_ai/splice
   COMPONENT
     Devel
 )
