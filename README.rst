@@ -1,7 +1,7 @@
 LibSplice
 #########
 
-.. image:: https://travis-ci.org/opencv-ai/splice.svg?branch=travis
+.. image:: https://travis-ci.org/opencv-ai/splice.svg?branch=master
     :target: https://travis-ci.org/opencv-ai/splice
 
 Build/Test with the docker
