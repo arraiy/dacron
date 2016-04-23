@@ -3,30 +3,31 @@
 #include <gtest/gtest.h>
 namespace opencv_ai {
 
-class Counter : Component {
+class Counter {
  public:
   Counter(Context ctx, std::string name)
-      : Component(ctx, name), count_out(*this, "count") {}
+      : component_(ctx, name), count_out(component_, "count") {}
+
   void Increment() {
     count_out.Send(count_);
     count_++;
   }
-  Output<int> count_out;
 
  private:
+  Component component_;
   int count_ = 0;
+
+ public:
+  Output<int> count_out;
 };
 
-class Adder : Component {
+class Adder {
  public:
   Adder(Context ctx, std::string name)
-      : Component(ctx, name),
-        a_in(*this, "a", std::bind(&Adder::HandleA, this, _1)),
-        b_in(*this, "b", std::bind(&Adder::HandleB, this, _1)),
-        sum_out(*this, "sum") {}
-  Input<int> a_in;
-  Input<int> b_in;
-  Output<int> sum_out;
+      : component_(ctx, name),
+        a_in(component_, "a", std::bind(&Adder::HandleA, this, _1)),
+        b_in(component_, "b", std::bind(&Adder::HandleB, this, _1)),
+        sum_out(component_, "sum") {}
 
  private:
   void HandleA(int a) {
@@ -40,7 +41,14 @@ class Adder : Component {
   }
 
   void Send() { sum_out.Send(a_ + b_); }
+
+  Component component_;
   int a_ = 0, b_ = 0;
+
+ public:
+  Input<int> a_in;
+  Input<int> b_in;
+  Output<int> sum_out;
 };
 
 TEST(InputOutput, Smoke) {

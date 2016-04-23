@@ -17,12 +17,21 @@ fi
 
 
 set -ex
-mkdir -p build && cd build
-cmake \
-    -DCMAKE_PREFIX_PATH=/opt/opencv_ai \
-    -DCMAKE_CXX_COMPILER=clang++ \
-    -DCMAKE_C_COMPILER=clang \
-    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-    ..
-make
-ctest
+for build_type in \
+    RelWithDebInfo \
+    ASan \
+    TSan \
+    UBSan
+do
+    (
+	mkdir -p build-$build_type && cd build-$build_type
+	cmake \
+	    -DCMAKE_PREFIX_PATH=/opt/opencv_ai \
+	    -DCMAKE_CXX_COMPILER=clang++ \
+	    -DCMAKE_C_COMPILER=clang \
+	    -DCMAKE_BUILD_TYPE=$build_type \
+	    ..
+	make
+	ctest
+    )
+done

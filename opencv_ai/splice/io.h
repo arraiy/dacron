@@ -110,11 +110,13 @@ class Input {
     CHECK(handler_ != nullptr);
   }
 
+  ~Input() { connection_.disconnect(); }
+
   void Connect(std::string channel_name) {
     CHECK(!Connected());
     channel_name_ = std::move(channel_name);
     signal_ = service_.LookUpSignal(channel_name_);
-    signal_->connect(std::bind(&Input::Send, this, _1));
+    connection_ = signal_->connect(std::bind(&Input::Send, this, _1));
   }
 
   bool Connected() const { return !!signal_; }
@@ -138,6 +140,7 @@ class Input {
   ChannelService<MessageType>& service_;
   std::string channel_name_;
   boost::optional<Signal&> signal_;
+  boost::signals2::connection connection_;
   MessageHandler handler_;
 };
 

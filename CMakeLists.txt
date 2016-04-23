@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.0)
 project(Splice)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+include(FindUBSan)
+include(FindTSan)
+include(FindASan)
+include(FindMSan)
 include(CTest)
 enable_testing()
 
@@ -10,7 +15,6 @@ set(Splice_PATCH_VERSION 0)
 set(Splice_VERSION
   ${Splice_MAJOR_VERSION}.${Splice_MINOR_VERSION}.${Splice_MINOR_VERSION})
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
