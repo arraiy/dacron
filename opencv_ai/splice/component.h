@@ -17,6 +17,8 @@ inline bool ValidName(const std::string& name) {
 
 inline std::string NameJoin(const std::string& parent,
                             const std::string& child) {
+  CHECK(!parent.empty());
+  CHECK(!child.empty());
   return parent + "/" + child;
 }
 
@@ -24,7 +26,7 @@ class Component {
  public:
   explicit Component(Context ctx, std::string name,
                      ContextState state = ContextState::kSame)
-      : ctx_(ctx, state), name_(std::move(name)) {
+      : ctx_(ctx, state), name_(std::move(name)), full_name_(name_) {
     CHECK(ValidName(name_)) << "Name is not valid." << name_;
   }
 
@@ -37,18 +39,11 @@ class Component {
     CHECK(ValidName(name_)) << "Name is not valid." << name_;
   }
 
-  Context& GetContext() { return ctx_; }
-
   const Context& GetContext() const { return ctx_; }
 
   const std::string& Name() const { return name_; }
 
-  const std::string& FullName() const {
-    if (parent_) {
-      return full_name_;
-    }
-    return name_;
-  }
+  const std::string& FullName() const { return full_name_; }
 
  private:
   Context ctx_;

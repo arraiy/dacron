@@ -26,4 +26,25 @@ TEST(Component, ValidName) {
   EXPECT_DEATH(Component(ctx1, ""), "Name is not valid");
 }
 
+TEST(Component, NameJoin) {
+  EXPECT_EQ("a/b", NameJoin("a", "b"));
+  EXPECT_EQ("a/b/c", NameJoin("a/b", "c"));
+  EXPECT_DEATH(NameJoin("", "a"), "empty");
+  EXPECT_DEATH(NameJoin("", ""), "empty");
+  EXPECT_DEATH(NameJoin("a", ""), "empty");
+}
+
+TEST(Component, NameFullName) {
+  Context ctx1;
+  Component c1(ctx1, "foo");
+  Component c2(c1, "bar");
+  Component c3(c2, "baz");
+  EXPECT_EQ("foo", c1.Name());
+  EXPECT_EQ("bar", c2.Name());
+  EXPECT_EQ("baz", c3.Name());
+  EXPECT_EQ("foo", c1.FullName());
+  EXPECT_EQ("foo/bar", c2.FullName());
+  EXPECT_EQ("foo/bar/baz", c3.FullName());
+}
+
 }  // namespace opencv_ai

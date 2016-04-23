@@ -42,26 +42,42 @@ class Context {
     strand_->post(std::forward<Function>(f));
   }
 
-  template <typename Function>
-  std::function<void()> Wrap(Function&& f) {
-    return strand_->wrap(std::forward<Function>(f));
-  }
-
   void ResetAndRun() {
     Reset();
     Run();
   }
 
+  // Run the io_service until it is out of work.
+  // subsequent calls to Run. See io_service::reset() docs.
+
   size_t Run() { return io_service_->run(); }
 
+  // Reset the Context's io_service. This should be invoked before
+  // subsequent calls to Run. See io_service::reset() docs.
   void Reset() { io_service_->reset(); }
 
   boost::asio::io_service::strand& GetStrand() const { return *strand_; }
   boost::asio::io_service& GetIoService() const { return *io_service_; }
 
  private:
+  // A class invariant is that io_service_, and strand_ are never
+  // null.  These are shared_ptr so that they may be aliased between
+  // copies of the same context.
   std::shared_ptr<boost::asio::io_service> io_service_;
   std::shared_ptr<boost::asio::io_service::strand> strand_;
+
+ public:
+  // Returns a wrapped function object which when invoked posts itself
+  // to the context's strand.  The wrapped function object should have
+  // the same signature as the f.
+  //
+  // NOTE: This needs to go at the bottom, so that the compiler has enough
+  // type information to for the auto return type.
+  template <typename Function>
+  auto Wrap(Function&& f)
+      -> decltype(this->strand_->wrap(std::forward<Function>(f))) {
+    return strand_->wrap(std::forward<Function>(f));
+  }
 };
 }  // namespace opencv_ai
 

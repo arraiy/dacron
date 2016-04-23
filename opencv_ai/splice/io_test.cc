@@ -25,8 +25,8 @@ class Adder {
  public:
   Adder(Context ctx, std::string name)
       : component_(ctx, name),
-        a_in(component_, "a", std::bind(&Adder::HandleA, this, _1)),
-        b_in(component_, "b", std::bind(&Adder::HandleB, this, _1)),
+        a_in(component_, "a", MemberHandler(&Adder::HandleA, this)),
+        b_in(component_, "b", MemberHandler(&Adder::HandleB, this)),
         sum_out(component_, "sum") {}
 
  private:

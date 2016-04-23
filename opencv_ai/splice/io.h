@@ -30,10 +30,6 @@ class ChannelService : public boost::asio::io_service::service {
 template <typename MessageType>
 boost::asio::io_service::id ChannelService<MessageType>::id;
 
-using std::placeholders::_1;
-using std::placeholders::_2;
-using std::placeholders::_3;
-
 template <typename MessageType>
 class Output {
  public:
@@ -103,7 +99,7 @@ class Input {
   Input(Component& component, std::string name, MessageHandler handler)
       : ctx_(component.GetContext()),
         name_(std::move(name)),
-        full_name_(NameJoin(component.FullName(), name)),
+        full_name_(NameJoin(component.FullName(), name_)),
         service_(boost::asio::use_service<ChannelService<MessageType>>(
             ctx_.GetIoService())),
         handler_(std::move(handler)) {
@@ -116,7 +112,8 @@ class Input {
     CHECK(!Connected());
     channel_name_ = std::move(channel_name);
     signal_ = service_.LookUpSignal(channel_name_);
-    connection_ = signal_->connect(std::bind(&Input::Send, this, _1));
+    connection_ =
+        signal_->connect(std::bind(&Input::Send, this, std::placeholders::_1));
   }
 
   bool Connected() const { return !!signal_; }
@@ -143,6 +140,13 @@ class Input {
   boost::signals2::connection connection_;
   MessageHandler handler_;
 };
+
+template <typename Function, typename Class>
+auto MemberHandler(Function&& f, Class* thiz)
+    -> decltype(std::bind(std::forward<Function>(f), thiz,
+                          std::placeholders::_1)) {
+  return std::bind(std::forward<Function>(f), thiz, std::placeholders::_1);
+}
 
 template <typename MessageType>
 typename Input<MessageType>::MessageHandler ValueSetter(MessageType& value) {
