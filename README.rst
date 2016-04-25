@@ -57,3 +57,11 @@ Make sure to run the ``bootstrap.sh`` script, to setup githooks, that
 check for whitespace and clang-format::
 
   ~/code/splice/bootstrap.sh
+
+Run what travis runs locally
+-----------------------------
+
+::
+
+  cd ~/code/splice
+  ./cv_run ./travis_build.sh

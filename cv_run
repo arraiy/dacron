@@ -11,7 +11,7 @@ OPENCV_AI_CODE_ROOT="$( command cd -P "$sdk_dir/.." > /dev/null && pwd -P)"
 # Update the digest to match the image you which to use.
 if [ -z "$OPENCVAI_DEV_ENV_TAG" ]
 then
-    DIGEST=@sha256:a2a5911f8e78f043dca11469b564b41d85fba8c06a7bdc2f4e91597fadb7b628
+    DIGEST=@sha256:b121ca1f70662c8ccfb1d4dd117f580a870d30386764be6291403a8460f6b1c0
 else
     DIGEST=$OPENCVAI_DEV_ENV_TAG
 fi

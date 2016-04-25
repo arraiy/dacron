@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.0)
 project(Splice)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+include(FindUBSan)
+include(FindTSan)
+include(FindASan)
+include(FindMSan)
 include(CTest)
 enable_testing()
 
@@ -10,7 +15,6 @@ set(Splice_PATCH_VERSION 0)
 set(Splice_VERSION
   ${Splice_MAJOR_VERSION}.${Splice_MINOR_VERSION}.${Splice_MINOR_VERSION})
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -18,7 +22,7 @@ set(CMAKE_CXX_FLAGS
   "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror")
 
 
-find_package(Boost REQUIRED program_options filesystem system)
+find_package(Boost REQUIRED program_options filesystem system regex)
 find_package(GTest REQUIRED)
 find_package(glog REQUIRED)
 
@@ -32,24 +36,31 @@ set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
 set(Splice_SOURCES)
 set(Splice_HEADERS)
 set(Splice_TEST_SOURCES)
-foreach(name splice)
-  LIST(APPEND Splice_SOURCES splice/${name}.cc)
-  LIST(APPEND Splice_HEADERS splice/${name}.h)
-  LIST(APPEND Splice_TEST_SOURCES splice/${name}_test.cc)
+foreach(name
+    context
+    component
+    io
+    )
+  LIST(APPEND Splice_SOURCES opencv_ai/splice/${name}.cc)
+  LIST(APPEND Splice_HEADERS opencv_ai/splice/${name}.h)
+  LIST(APPEND Splice_TEST_SOURCES opencv_ai/splice/${name}_test.cc)
 endforeach()
 
 add_library(Splice SHARED
   ${Splice_SOURCES}
   ${Splice_HEADERS})
 
+target_link_libraries(Splice
+  ${Boost_LIBRARIES}
+  ${glog_LIBRARIES})
+
 add_executable(SpliceTest
-  splice/test_main.cc
+  opencv_ai/splice/test_main.cc
   ${Splice_TEST_SOURCES})
 
 target_link_libraries(SpliceTest Splice ${GTEST_LIBRARY} -pthread)
 
 gtest_add_tests(SpliceTest "" ${Splice_TEST_SOURCES})
-
 
 
 set_property(TARGET Splice PROPERTY VERSION ${Splice_VERSION})
@@ -71,7 +82,7 @@ install(
   FILES
      ${Splice_HEADERS}
   DESTINATION
-    include/splice
+    include/opencv_ai/splice
   COMPONENT
     Devel
 )
