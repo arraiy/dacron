@@ -40,6 +40,7 @@ foreach(name
     context
     component
     io
+    tcp
     )
   LIST(APPEND Splice_SOURCES opencv_ai/splice/${name}.cc)
   LIST(APPEND Splice_HEADERS opencv_ai/splice/${name}.h)
