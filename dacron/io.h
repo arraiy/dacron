@@ -1,10 +1,10 @@
-#ifndef OPENCV_AI_SPLICE_IO_H_
-#define OPENCV_AI_SPLICE_IO_H_
+#ifndef DACRON_IO_H_
+#define DACRON_IO_H_
 
-#include <opencv_ai/splice/component.h>
+#include <dacron/component.h>
 #include <boost/signals2.hpp>
 
-namespace opencv_ai {
+namespace dacron {
 
 template <typename MessageType>
 class ChannelService : public boost::asio::io_service::service {
@@ -166,5 +166,5 @@ void Connect(Output<MessageType>& output, Input<MessageType>& input) {
   }
 }
 
-}  // namespace opencv_ai
-#endif  // OPENCV_AI_SPLICE_IO_H_
+}  // namespace dacron
+#endif  // DACRON_IO_H_

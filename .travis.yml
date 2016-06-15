@@ -7,6 +7,3 @@ services:
 script:
   - ./cv_run ./travis_build.sh
 
-cache:
-  - apt
-  - docker

@@ -1,8 +1,8 @@
-#include <opencv_ai/splice/component.h>
+#include <dacron/component.h>
 
 #include <gtest/gtest.h>
 
-namespace opencv_ai {
+namespace dacron {
 TEST(Component, Construct) {
   Context ctx1;
   Component comp1(ctx1, "comp1");
@@ -47,4 +47,4 @@ TEST(Component, NameFullName) {
   EXPECT_EQ("foo/bar/baz", c3.FullName());
 }
 
-}  // namespace opencv_ai
+}  // namespace dacron
