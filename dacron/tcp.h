@@ -1,7 +1,7 @@
-#ifndef OPENCV_AI_SPLICE_TCP_H_
-#define OPENCV_AI_SPLICE_TCP_H_
+#ifndef DACRON_TCP_H_
+#define DACRON_TCP_H_
 
-#include <opencv_ai/splice/context.h>
+#include <dacron/context.h>
 #include <boost/asio/placeholders.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/asio/connect.hpp>
@@ -11,7 +11,7 @@
 
 #include <glog/logging.h>
 
-namespace opencv_ai {
+namespace dacron {
 using tcp = boost::asio::ip::tcp;
 constexpr const size_t kBufferHeaderLength = 4 + 8 + 4;
 
@@ -97,4 +97,4 @@ class BufferClient {
 };
 }
 
-#endif  // OPENCV_AI_SPLICE_TCP_H_
+#endif  // DACRON_TCP_H_

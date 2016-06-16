@@ -1,7 +1,7 @@
-#include <opencv_ai/splice/io.h>
+#include <dacron/io.h>
 
 #include <gtest/gtest.h>
-namespace opencv_ai {
+namespace dacron {
 
 class Counter {
  public:

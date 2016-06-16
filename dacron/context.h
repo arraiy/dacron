@@ -1,10 +1,10 @@
-#ifndef OPENCV_AI_SPLICE_CONTEXT_H_
-#define OPENCV_AI_SPLICE_CONTEXT_H_
+#ifndef DACRON_CONTEXT_H_
+#define DACRON_CONTEXT_H_
 
 #include <boost/asio/io_service.hpp>
 #include <boost/asio/strand.hpp>
 
-namespace opencv_ai {
+namespace dacron {
 
 enum class ContextState { kSame, kDifferent };
 
@@ -79,6 +79,6 @@ class Context {
     return strand_->wrap(std::forward<Function>(f));
   }
 };
-}  // namespace opencv_ai
+}  // namespace dacron
 
-#endif  // OPENCV_AI_SPLICE_CONTEXT_H_
+#endif  // DACRON_CONTEXT_H_

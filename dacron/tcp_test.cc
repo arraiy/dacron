@@ -1,7 +1,7 @@
-#include <opencv_ai/splice/tcp.h>
+#include <dacron/tcp.h>
 
 #include <gtest/gtest.h>
-namespace opencv_ai {
+namespace dacron {
 
 TEST(Tcp, Smoke) {
   Context ctx;

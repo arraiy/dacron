@@ -1,8 +1,8 @@
-#include <opencv_ai/splice/context.h>
+#include <dacron/context.h>
 
 #include <gtest/gtest.h>
 
-namespace opencv_ai {
+namespace dacron {
 TEST(Context, Construct) {
   Context ctx1;
   Context ctx2;
@@ -37,4 +37,4 @@ TEST(Context, Wrap) {
   EXPECT_TRUE(dispatched);
 }
 
-}  // namespace opencv_ai
+}  // namespace dacron

@@ -1,14 +1,14 @@
-#ifndef OPENCV_AI_SPLICE_COMPONENT_H_
-#define OPENCV_AI_SPLICE_COMPONENT_H_
+#ifndef DACRON_COMPONENT_H_
+#define DACRON_COMPONENT_H_
 
 #include <boost/optional.hpp>
 #include <boost/regex.hpp>
 
 #include <glog/logging.h>
 
-#include <opencv_ai/splice/context.h>
+#include <dacron/context.h>
 
-namespace opencv_ai {
+namespace dacron {
 
 inline bool ValidName(const std::string& name) {
   static const boost::regex e("[a-zA-Z][\\w_]*");
@@ -50,6 +50,6 @@ class Component {
   std::string name_, full_name_;
   boost::optional<const Component&> parent_;
 };
-}  // namespace opencv_ai
+}  // namespace dacron
 
 #endif
