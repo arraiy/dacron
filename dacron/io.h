@@ -1,5 +1,6 @@
 #ifndef DACRON_IO_H_
 #define DACRON_IO_H_
+#include <atomic>
 
 #include <dacron/component.h>
 #include <boost/signals2.hpp>
@@ -80,29 +81,43 @@ class Output {
   boost::optional<Signal&> signal_;
 };
 
+// Used to specify the queue semantics for receiving messages.
+//
+// - kFifo - The default is a an unbounded FIFO.
+// - kDrop - The FIFO of length one, and and if its
+//           full, new messages will be dropped.
+//
+enum class InputQueueType { kFifo, kDrop };
+
 template <typename MessageType>
 class Input {
  public:
   typedef typename ChannelService<MessageType>::Signal Signal;
   typedef std::function<void(const MessageType&)> MessageHandler;
 
-  Input(const Context& context, std::string name, MessageHandler handler)
+  Input(const Context& context, std::string name, MessageHandler handler,
+        InputQueueType queue_type = InputQueueType::kFifo)
       : ctx_(context),
         name_(std::move(name)),
         full_name_(name_),
         service_(boost::asio::use_service<ChannelService<MessageType>>(
             ctx_.GetIoService())),
-        handler_(std::move(handler)) {
+        handler_(std::move(handler)),
+        queue_type_(queue_type),
+        queue_length_(0) {
     CHECK(handler_ != nullptr);
   }
 
-  Input(Component& component, std::string name, MessageHandler handler)
+  Input(Component& component, std::string name, MessageHandler handler,
+        InputQueueType queue_type = InputQueueType::kFifo)
       : ctx_(component.GetContext()),
         name_(std::move(name)),
         full_name_(NameJoin(component.FullName(), name_)),
         service_(boost::asio::use_service<ChannelService<MessageType>>(
             ctx_.GetIoService())),
-        handler_(std::move(handler)) {
+        handler_(std::move(handler)),
+        queue_type_(queue_type),
+        queue_length_(0) {
     CHECK(handler_ != nullptr);
   }
 
@@ -128,7 +143,24 @@ class Input {
   std::string FullName() const { return full_name_; }
 
   void Send(const MessageType& message) {
-    ctx_.Post([message, this] { handler_(message); });
+    switch (queue_type_) {
+      case InputQueueType::kFifo:
+        ++queue_length_;
+        ctx_.Post([message, this] {
+          handler_(message);
+          --queue_length_;
+        });
+        break;
+      case InputQueueType::kDrop: {
+        int x = 0;
+        if (queue_length_.compare_exchange_strong(x, 1)) {
+          ctx_.Post([message, this] {
+            handler_(message);
+            --queue_length_;
+          });
+        }
+      } break;
+    }
   }
 
  private:
@@ -139,6 +171,8 @@ class Input {
   boost::optional<Signal&> signal_;
   boost::signals2::connection connection_;
   MessageHandler handler_;
+  InputQueueType queue_type_;
+  std::atomic<int> queue_length_;
 };
 
 template <typename Function, typename Class>

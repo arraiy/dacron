@@ -30,4 +30,4 @@ cv_test() {
   cv_run ctest $@
 }
 
-export PATH=/usr/lib/llvm-3.6/bin:$PATH
+export PATH=/usr/lib/ccache:/usr/lib/llvm-3.6/bin:$PATH
