@@ -68,4 +68,30 @@ TEST(InputOutput, Smoke) {
     EXPECT_EQ(i * 2, sum);
   }
 }
+
+TEST(InputOutput, Drop) {
+  Context ctx;
+  Counter count(ctx, "count");
+  std::vector<int> counts;
+  Input<int> count_in(ctx, "count", [&counts](int x) { counts.push_back(x); },
+                      InputQueueType::kDrop);
+  Connect(count.count_out, count_in);
+  for (int i = 0; i < 10; ++i) {
+    count.Increment();
+  }
+  ctx.ResetAndRun();
+  ASSERT_EQ(1, counts.size());
+  // Should have only received the first one.
+  EXPECT_EQ(0, counts[0]);
+  ctx.ResetAndRun();
+  // Shouldn't change, no messages pending.
+  ASSERT_EQ(1, counts.size());
+  EXPECT_EQ(0, counts[0]);
+
+  // Ok now we should receive the next increment.
+  count.Increment();
+  ctx.ResetAndRun();
+  ASSERT_EQ(2, counts.size());
+  EXPECT_EQ(10, counts[1]);
+}
 }
