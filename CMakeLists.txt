@@ -24,11 +24,13 @@ set(CMAKE_CXX_FLAGS
 
 find_package(Boost REQUIRED program_options filesystem system regex)
 find_package(GTest REQUIRED)
+find_package(gflags REQUIRED)
 find_package(glog REQUIRED)
 
 include_directories(${Boost_INCLUDE_DIRS} SYSTEM)
 include_directories(${GTEST_INCLUDE_DIRS} SYSTEM)
 include_directories(${glog_INCLUDE_DIRS} SYSTEM)
+include_directories(${gflags_INCLUDE_DIRS} SYSTEM)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
@@ -59,7 +61,7 @@ add_executable(DacronTest
   dacron/test_main.cc
   ${Dacron_TEST_SOURCES})
 
-target_link_libraries(DacronTest Dacron ${GTEST_LIBRARY} -pthread)
+target_link_libraries(DacronTest Dacron ${GTEST_LIBRARY} ${glog_LIBRARIES} glog ${gflags_LIBRARIES} -pthread)
 
 gtest_add_tests(DacronTest "" ${Dacron_TEST_SOURCES})
 
