@@ -13,12 +13,12 @@
 
 namespace dacron {
 using tcp = boost::asio::ip::tcp;
-constexpr const size_t kBufferHeaderLength = 4 + 8 + 4;
+constexpr const std::size_t kBufferHeaderLength = 4 + 8 + 4;
 
 class BufferClient {
  public:
   BufferClient(Context ctx, std::string host, std::string port,
-               std::function<void(size_t stamp,
+               std::function<void(uint64_t stamp,
                                   const std::vector<char>& buffer)> handler)
       : ctx_(ctx),
         host_(host),
@@ -41,7 +41,7 @@ class BufferClient {
                << " Error: " << ec.message();
     boost::asio::connect(socket_, endpoint_iterator);
     ctx_.Post(std::bind(&BufferClient::ReceiveLoop, this,
-                        boost::system::error_code(), size_t(0)));
+                        boost::system::error_code(), std::size_t(0)));
   }
 
   void ReceiveLoop(boost::system::error_code ec, std::size_t n_bytes) {
@@ -93,7 +93,7 @@ class BufferClient {
   std::array<char, kBufferHeaderLength> header_;
   uint64_t stamp_;
   std::vector<char> buffer_;
-  std::function<void(size_t stamp, const std::vector<char>& buffer)> handler_;
+  std::function<void(uint64_t stamp, const std::vector<char>& buffer)> handler_;
 };
 }
 
