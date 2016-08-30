@@ -61,7 +61,7 @@ add_executable(DacronTest
   dacron/test_main.cc
   ${Dacron_TEST_SOURCES})
 
-target_link_libraries(DacronTest Dacron ${GTEST_LIBRARY} ${glog_LIBRARIES} glog ${gflags_LIBRARIES} -pthread)
+target_link_libraries(DacronTest Dacron ${GTEST_LIBRARY} ${glog_LIBRARIES} ${gflags_LIBRARIES} -pthread)
 
 gtest_add_tests(DacronTest "" ${Dacron_TEST_SOURCES})
 
