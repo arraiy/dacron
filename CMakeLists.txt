@@ -49,6 +49,8 @@ foreach(name
   LIST(APPEND Dacron_TEST_SOURCES dacron/${name}_test.cc)
 endforeach()
 
+set(glog_LIBRARIES glog::glog)
+
 add_library(Dacron SHARED
   ${Dacron_SOURCES}
   ${Dacron_HEADERS})
