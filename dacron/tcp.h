@@ -25,6 +25,7 @@ class BufferClient {
         port_(port),
         resolver_(ctx_.GetIoService()),
         socket_(ctx_.GetIoService()),
+        header_(kBufferHeaderLength, 0),
         handler_(std::move(handler)) {
     CHECK(!!handler_) << "Handler may not be null.";
     tcp::resolver::query query(tcp::v4(), host, port);
@@ -90,7 +91,7 @@ class BufferClient {
   tcp::resolver resolver_;
   tcp::socket socket_;
 
-  std::array<char, kBufferHeaderLength> header_;
+  std::vector<char> header_;
   uint64_t stamp_;
   std::vector<char> buffer_;
   std::function<void(uint64_t stamp, const std::vector<char>& buffer)> handler_;

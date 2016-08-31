@@ -27,6 +27,11 @@ find_package(GTest REQUIRED)
 find_package(gflags REQUIRED)
 find_package(glog REQUIRED)
 
+if(NOT glog_LIBRARIES)
+  message("Hacking around glog find_package.")
+  set(glog_LIBRARIES glog::glog)
+endif()
+
 include_directories(${Boost_INCLUDE_DIRS} SYSTEM)
 include_directories(${GTEST_INCLUDE_DIRS} SYSTEM)
 include_directories(${glog_INCLUDE_DIRS} SYSTEM)
@@ -39,15 +44,18 @@ set(Dacron_SOURCES)
 set(Dacron_HEADERS)
 set(Dacron_TEST_SOURCES)
 foreach(name
-    context
-    component
-    io
-    tcp
-    )
+	context
+	component
+	io
+	tcp
+	)
   LIST(APPEND Dacron_SOURCES dacron/${name}.cc)
   LIST(APPEND Dacron_HEADERS dacron/${name}.h)
   LIST(APPEND Dacron_TEST_SOURCES dacron/${name}_test.cc)
 endforeach()
+
+
+
 
 add_library(Dacron SHARED
   ${Dacron_SOURCES}
@@ -61,7 +69,7 @@ add_executable(DacronTest
   dacron/test_main.cc
   ${Dacron_TEST_SOURCES})
 
-target_link_libraries(DacronTest Dacron ${GTEST_LIBRARY} ${glog_LIBRARIES} glog ${gflags_LIBRARIES} -pthread)
+target_link_libraries(DacronTest Dacron ${GTEST_LIBRARY} ${glog_LIBRARIES} ${gflags_LIBRARIES} -pthread)
 
 gtest_add_tests(DacronTest "" ${Dacron_TEST_SOURCES})
 
@@ -83,11 +91,11 @@ install(TARGETS Dacron EXPORT DacronTargets
 
 install(
   FILES
-     ${Dacron_HEADERS}
+	 ${Dacron_HEADERS}
   DESTINATION
-    include/dacron
+	include/dacron
   COMPONENT
-    Devel
+	Devel
 )
 
 include(CMakePackageConfigHelpers)
@@ -109,18 +117,18 @@ configure_file(cmake/DacronConfig.cmake
 set(ConfigPackageLocation lib/cmake/Dacron)
 install(EXPORT DacronTargets
   FILE
-    DacronTargets.cmake
+	DacronTargets.cmake
   NAMESPACE
-    Dacron::
+	Dacron::
   DESTINATION
-    ${ConfigPackageLocation}
+	${ConfigPackageLocation}
 )
 install(
   FILES
-    cmake/DacronConfig.cmake
-    "${CMAKE_CURRENT_BINARY_DIR}/Dacron/DacronConfigVersion.cmake"
+	cmake/DacronConfig.cmake
+	"${CMAKE_CURRENT_BINARY_DIR}/Dacron/DacronConfigVersion.cmake"
   DESTINATION
-    ${ConfigPackageLocation}
+	${ConfigPackageLocation}
   COMPONENT
-    Devel
+	Devel
 )
