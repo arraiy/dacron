@@ -1,21 +1,21 @@
 LibDacron
 #########
 
-.. image:: https://travis-ci.org/opencv-ai/dacron.svg?branch=master
-    :target: https://travis-ci.org/opencv-ai/dacron
+.. image:: https://travis-ci.org/arraiy/dacron.svg?branch=master
+    :target: https://travis-ci.org/arraiy/dacron
 
 
 Get the code::
 
   mkdir -p ~/code
   cd ~/code
-  git clone https://github.com/opencv-ai/dacron.git
+  git clone https://github.com/arraiy/dacron.git
 
 Build/Test with the docker
 ##########################
 
 Uses the docker development environment from
-https://github.com/opencv-ai/dev_env
+https://github.com/arraiy/dev_env
 
 First, install Docker
 https://docs.docker.com/engine/installation/linux/ubuntulinux/.
